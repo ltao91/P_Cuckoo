@@ -444,7 +444,7 @@ int main()
     //     cout << "std time : " << get_duration_ms(s, e) << endl;
     // }
     {
-        for (int t_num = 1; t_num < 6; t_num += 1)
+        for (int t_num = 1; t_num < 60; t_num += 1)
         {
             OptCuckoo<int> Cuckoo(800 * 1000);
             vector<thread> threads;
@@ -473,32 +473,7 @@ int main()
                 threads[i].join();
             }
             auto e = get_now();
-            cout << "aborted (times) : " << Cuckoo.aborted_num << endl;
-            cout << "validation fails : " << Cuckoo.validation_fail << endl;
-            cout << "evict was null : " << Cuckoo.evict_null << endl;
-            cout << "sum_time : " << Cuckoo.sum_time / 1000000 << endl;
-            cout << "part 1 : " << Cuckoo.w_1 / 1000000 << endl;
-            cout << "part 2 : " << Cuckoo.w_2 / 1000000 << endl;
-            cout << "part 3 : " << Cuckoo.w_3 / 1000000 << endl;
-            cout << "c1 : " << Cuckoo.c1 << endl;
-            cout << "c2 : " << Cuckoo.c2 << endl;
-            cout << "c3 : " << Cuckoo.c3 << endl;
-            cout << "release time : " << Cuckoo.release_time / 1000000 << endl;
-            cout << "hash_time : " << Cuckoo.hash_time / 1000000 << endl;
-            cout << "get_version time : " << Cuckoo.get_version_t / 1000000 << endl;
-            cout << "increase_version time : " << Cuckoo.increase_version_t / 1000000 << endl;
-            cout << "wirte_lock time : " << Cuckoo.write_lock_time / 1000000 << endl;
-            cout << "my_cuckoo time : " << get_duration_ms(s, e) / 1000000 << endl;
-            cout << endl;
-            cout << endl;
-
-            for (int i = 0; i < ops; i++)
-            {
-                if (Cuckoo.get("random:" + to_string(i)) != i)
-                {
-                    cout << i << " " << Cuckoo.get("random:" + to_string(i)) << endl;
-                }
-            }
+            cout <<"threads : "<<t_num <<" time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
         }
     }
 }
