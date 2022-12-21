@@ -49,7 +49,7 @@ public:
     ~OptCuckoo(){
         for(auto &i:table){
             for(auto &j:table){
-                if(j!=NULL){
+                if(j!=nullptr){
                     delete j;
                 }
             }
