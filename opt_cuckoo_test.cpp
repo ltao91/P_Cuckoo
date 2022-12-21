@@ -19,7 +19,6 @@ int main()
         {
             for (int i = tid; i < ops; i += t_num)
             {
-                cout<<i<<endl;
                 Cuckoo.put(args[i].first, args[i].second, tid + 1);
             }
         };
