@@ -189,7 +189,7 @@ public:
             ABORT();
             i++;
             aborted_num++;
-            if (i >= 1000)
+            if (i >= 100000)
             {
                 cout << "Too many abort" << endl;
                 exit(0);
@@ -421,7 +421,6 @@ public:
             cout << "not found shortest path" << endl;
             
             ABORT();
-            exit(0);
             return false;
         }
 

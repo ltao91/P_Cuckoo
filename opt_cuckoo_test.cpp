@@ -2,7 +2,7 @@
 
 int main()
 {
-    for (int t_num = 1; t_num < 15; t_num += 1)
+    for (int t_num = 1; t_num < 200; t_num += 1)
     {
         OptCuckoo<int> Cuckoo(8000 * 1000);
         // OptCuckoo<int> Cuckoo(10);
@@ -19,13 +19,8 @@ int main()
         {
             for (int i = tid; i < ops; i += t_num)
             {
-                // cout<<i<<endl;
+                cout<<i<<endl;
                 Cuckoo.put(args[i].first, args[i].second, tid + 1);
-                // uint32_t h1=0,h2=0;
-                // hashlittle2(args[i].first.c_str(),args[i].first.length(),&h1,&h2);
-                // cout<<"NUM : "<<i<<"  h1 : "<<h1%Cuckoo.table.size()<<"  h2 : "<<h2%Cuckoo.table.size()<<endl;
-                // Cuckoo.debug();
-                // cout<<endl;cout<<endl;cout<<endl;
             }
         };
 
