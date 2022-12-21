@@ -42,8 +42,19 @@ public:
             tag = t_tag;
             data = new Data(t_key, t_val);
         }
+        ~Node(){
+            delete data;
+        }
     };
-
+    ~OptCuckoo(){
+        for(auto &i:table){
+            for(auto &j:table){
+                if(j!=NULL){
+                    delete j;
+                }
+            }
+        }
+    }
     const int SLOTS_NUM = 4;
     const int MAX_LOOP_FOR_PUT = 80 * 1000;
 
