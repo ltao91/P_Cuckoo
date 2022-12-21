@@ -4,7 +4,7 @@ int main()
 {
     for (int t_num = 1; t_num < 200; t_num += 1)
     {
-        cout<<"start"
+        cout<<"start"<<endl;
         // OptCuckoo<int> Cuckoo(8000 * 1000);
         OptCuckoo<int> Cuckoo(100);
         vector<thread> threads;
