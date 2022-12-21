@@ -399,7 +399,6 @@ public:
                     nv.push_back(get_version(h1, i));
                     np.push_back(make_pair(h1, i));
                     que.push(make_pair(np,nv));
-                    break;
                 }
                 if (find(p.begin(),p.end(),make_pair(h2, i)) == p.end())
                 {
@@ -408,7 +407,6 @@ public:
                     nv.push_back(get_version(h2, i));
                     np.push_back(make_pair(h2, i));
                     que.push(make_pair(np,nv));
-                    break;
                 }
             }
         };

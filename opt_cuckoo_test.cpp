@@ -4,11 +4,11 @@ int main()
 {
     for (int t_num = 1; t_num < 200; t_num += 1)
     {
-        OptCuckoo<int> Cuckoo(8000 * 1000);
-        // OptCuckoo<int> Cuckoo(10);
+        // OptCuckoo<int> Cuckoo(8000 * 1000);
+        OptCuckoo<int> Cuckoo(100);
         vector<thread> threads;
-        const int ops = 27000 * 1000;
-        // const int ops = 38;
+        // const int ops = 27000 * 1000;
+        const int ops = 380;
         vector<pair<string, int>> args(ops);
         for (int i = 0; i < ops; i++)
         {
