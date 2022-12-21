@@ -51,6 +51,7 @@ int main()
                 cout << endl;
                 cout << endl;
                 map<OptCuckoo<int>::Node *, int> m;
+                int nu=0;
                 for (auto &i : Cuckoo.table)
                 {
                     for (auto j : i)
@@ -62,9 +63,12 @@ int main()
                             {
                                 cout << j->data->key << "  " << j->data->val << endl;
                             }
+                        }else{
+                            nu++;
                         }
                     }
                 }
+                cout<<"null num "<<nu<<endl;
                 exit(0);
             }
         }
