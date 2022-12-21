@@ -43,9 +43,9 @@ public:
             tag = t_tag;
             data = new Data(t_key, t_val);
         }
-        ~Node(){
-            delete data;
-        }
+        // ~Node(){
+        //     delete data;
+        // }
     };
     ~OptCuckoo(){
         for(auto &i:table){
