@@ -49,8 +49,8 @@ public:
     };
     ~OptCuckoo(){
         for(auto &i:table){
-            for(auto j:i){
-                if(j!=NULL){
+            for(auto &j:i){
+                if(j!=nullptr){
                     delete j;
                 }
             }
