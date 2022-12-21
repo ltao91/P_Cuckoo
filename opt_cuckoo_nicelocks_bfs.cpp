@@ -52,6 +52,7 @@ public:
             for(auto &j:i){
                 if(j!=nullptr){
                     delete j;
+                    j=nullptr;
                 }
             }
         }
