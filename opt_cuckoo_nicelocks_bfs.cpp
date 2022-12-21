@@ -47,16 +47,16 @@ public:
         //     delete data;
         // }
     };
-    ~OptCuckoo(){
-        for(auto &i:table){
-            for(auto &j:i){
-                if(j!=nullptr){
-                    delete j;
-                    j=nullptr;
-                }
-            }
-        }
-    }
+    // ~OptCuckoo(){
+    //     for(auto &i:table){
+    //         for(auto &j:i){
+    //             if(j!=nullptr){
+    //                 delete j;
+    //                 j=nullptr;
+    //             }
+    //         }
+    //     }
+    // }
 
     const int SLOTS_NUM = 4;
     const int MAX_LOOP_FOR_PUT = 80 * 1000;
