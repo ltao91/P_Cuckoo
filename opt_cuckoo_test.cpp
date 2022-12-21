@@ -45,6 +45,7 @@ int main()
                 exit(0);
             }
         }
+        cout<<"    works correctly"<<endl;
     }
     // for (int t_num = 1; t_num < 60; t_num += 1)
     // {
