@@ -46,7 +46,7 @@ int main()
                 cout<<args[i].second<<endl;
                 Cuckoo.debug();
                 hashlittle2(args[i].first.c_str(),args[i].first.length(),&h1,&h2);
-                cout<<h1<<" "<<h2<<endl;
+                cout<<h1%Cuckoo.table_size<<" "<<h2%Cuckoo.table_size<<endl;
                 exit(0);
             }
         }
