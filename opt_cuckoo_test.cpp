@@ -38,11 +38,15 @@ int main()
         for (int i = 0; i < ops; i++)
         {
             if(Cuckoo.get(args[i].first) != args[i].second){
+                
+                uint32_t h1=0,h2=0;
                 cout<<i<<endl;
                 cout<<Cuckoo.get(args[i].first)<<endl;
                 cout<<args[i].first<<endl;
                 cout<<args[i].second<<endl;
                 Cuckoo.debug();
+                hashlittle2(args[i].first.c_str(),args[i].first.length(),&h1,&h2);
+                cout<<h1<<" "<<h2<<endl;
                 exit(0);
             }
         }
