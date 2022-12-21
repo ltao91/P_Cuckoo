@@ -4,6 +4,7 @@ int main()
 {
     for (int t_num = 1; t_num < 200; t_num += 1)
     {
+        cout<<"start"
         // OptCuckoo<int> Cuckoo(8000 * 1000);
         OptCuckoo<int> Cuckoo(100);
         vector<thread> threads;
@@ -33,7 +34,7 @@ int main()
             threads[i].join();
         }
         auto e = get_now();
-        cout << "threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
+        cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
         for (int i = 0; i < ops; i++)
         {
             if(Cuckoo.get(args[i].first) != args[i].second){
@@ -45,7 +46,7 @@ int main()
                 exit(0);
             }
         }
-        cout<<"    works correctly"<<endl;
+        cout<<"        works correctly"<<endl;
     }
     // for (int t_num = 1; t_num < 60; t_num += 1)
     // {
