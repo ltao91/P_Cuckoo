@@ -243,8 +243,8 @@ public:
                 Node *node = table[h1][i];
                 if (node == NULL)
                 {
-                    path.push_back(make_pair(h1, i));
                     path_versions_history.push_back(get_version(h1, i));
+                    path.push_back(make_pair(h1, i));
                     is_success = true;
                     break;
                 }
@@ -275,8 +275,8 @@ public:
                 Node *node = table[h2][i];
                 if (node == NULL)
                 {
-                    path.push_back(make_pair(h2, i));
                     path_versions_history.push_back(get_version(h2, i));
+                    path.push_back(make_pair(h2, i));
                     is_success = true;
                     break;
                 }
@@ -307,17 +307,17 @@ public:
                 if (visited[h1][i] == 0)
                 {
                     visited[h1][i] = TID;
+                    path_versions_history.push_back(get_version(h1, i));
                     path.push_back(make_pair(h1, i));
                     evict_node = table[h1][i];
-                    path_versions_history.push_back(get_version(h1, i));
                     break;
                 }
                 if (visited[h2][i] == 0)
                 {
                     visited[h2][i] = TID;
+                    path_versions_history.push_back(get_version(h2, i));
                     path.push_back(make_pair(h2, i));
                     evict_node = table[h2][i];
-                    path_versions_history.push_back(get_version(h2, i));
                     break;
                 }
             }

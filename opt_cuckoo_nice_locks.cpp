@@ -1,3 +1,4 @@
+//maybe we have critical bag with casting uint32_t to int in h1 & h2
 #include <iostream>
 #include <string>
 #include <vector>
@@ -68,6 +69,7 @@ public:
     void ABORT()
     {
         // this is for debug and for annotation
+        // cout<<"ABORTED"<<endl;
     }
 
     OptCuckoo(int t_table_size)
@@ -127,10 +129,10 @@ public:
             for (int i = 0; i < SLOTS_NUM; i++)
             {
                 Node *node = table[h1][i];
-                if (node != NULL && node->tag == tag && node->data != NULL)
+                uint32_t start_version = get_version(h1, i);
+                if (node != NULL && node->tag == tag&& node->data != NULL)
                 {
                     Data *data = node->data;
-                    uint32_t start_version = get_version(h1, i);
                     if (key == data->key)
                     {
                         T val = data->val;
@@ -148,10 +150,10 @@ public:
             for (int i = 0; i < SLOTS_NUM; i++)
             {
                 Node *node = table[h2][i];
-                if (node != NULL && node->tag == tag && node->data != NULL)
+                uint32_t start_version = get_version(h2, i);
+                if (node != NULL && node->tag == tag&& node->data != NULL)
                 {
                     Data *data = node->data;
-                    uint32_t start_version = get_version(h2, i);
                     if (key == data->key)
                     {
                         T val = data->val;
@@ -196,7 +198,7 @@ public:
             ABORT();
             i++;
             aborted_num++;
-            if (i >= 10)
+            if (i >= 1000)
             {
                 cout << "Too many abort" << endl;
                 exit(0);
@@ -241,15 +243,18 @@ public:
             for (int i = 0; i < SLOTS_NUM; i++)
             {
                 Node *node = table[h1][i];
+                auto now=get_version(h1,i);
                 if (node == NULL)
                 {
+                    path_versions_history.push_back(now);
                     path.push_back(make_pair(h1, i));
-                    path_versions_history.push_back(get_version(h1, i));
                     is_success = true;
                     break;
                 }
-                else if (counter == 0 && node->data->key == key)
+                else if (counter == 0 && node->tag == tag&& node->data->key == key)
                 {
+                    cout << "H1 ERROE" << endl;
+                    exit(0);
                     table_locks[h1][i].lock();
                     if (node->data->key != key)
                     {
@@ -260,7 +265,7 @@ public:
                     node->data->val = val;
                     increase_version(h1, i);
                     table_locks[h1][i].unlock();
-                    cout<<"HI!"<<endl;
+                    cout << "HI!" << endl;
                     return true;
                 }
             }
@@ -273,15 +278,18 @@ public:
             for (int i = 0; i < SLOTS_NUM; i++)
             {
                 Node *node = table[h2][i];
+                auto now=get_version(h2,i);
                 if (node == NULL)
                 {
+                    path_versions_history.push_back(now);
                     path.push_back(make_pair(h2, i));
-                    path_versions_history.push_back(get_version(h2, i));
                     is_success = true;
                     break;
                 }
-                else if (counter == 0 && node->data->key == key)
+                else if (counter == 0 && node->tag == tag&& node->data->key == key)
                 {
+                    cout << "H2 ERROE" << endl;
+                    exit(0);
                     table_locks[h2][i].lock();
                     if (node->data->key != key)
                     {
@@ -307,17 +315,17 @@ public:
                 if (visited[h1][i] == 0)
                 {
                     visited[h1][i] = TID;
+                    path_versions_history.push_back(get_version(h1, i));
                     path.push_back(make_pair(h1, i));
                     evict_node = table[h1][i];
-                    path_versions_history.push_back(get_version(h1, i));
                     break;
                 }
                 if (visited[h2][i] == 0)
                 {
                     visited[h2][i] = TID;
+                    path_versions_history.push_back(get_version(h2, i));
                     path.push_back(make_pair(h2, i));
                     evict_node = table[h2][i];
-                    path_versions_history.push_back(get_version(h2, i));
                     break;
                 }
             }
@@ -338,6 +346,7 @@ public:
             return false;
         }
         auto original_node = new Node(original_tag, original_key, original_val);
+
         if (path.size() == 1)
         {
             pair<int, int> index = path.front();
@@ -349,7 +358,6 @@ public:
                 release_visited(path, TID);
                 return false;
             }
-            // Node *node = new Node(original_tag, key, val);
             increase_version(index.first, index.second);
             table[index.first][index.second] = original_node;
             increase_version(index.first, index.second);
@@ -357,41 +365,57 @@ public:
             release_visited(path, TID);
             return true;
         }
-
-        auto path_for_lock = path;
-        sort(path_for_lock.begin(), path_for_lock.end());
-        for (auto i : path_for_lock)
+        for (int i = path.size() - 1; i > 0; i--)
         {
-            table_locks[i.first][i.second].lock();
-        }
-        auto unlock_all_pathlocks = [&]()
-        {
-            for (auto i : path_for_lock)
+            auto to = path[i];
+            auto from = path[i - 1];
+            // lock smaller in first.
+            if (to < from)
             {
-                table_locks[i.first][i.second].unlock();
+                table_locks[to.first][to.second].lock();
+                table_locks[from.first][from.second].lock();
             }
-        };
+            else
+            {
+                table_locks[from.first][from.second].lock();
+                table_locks[to.first][to.second].lock();
+            }
 
-        for (int i = 0; i < path.size(); i++)
-        {
-            if (get_version(path[i].first, path[i].second) != path_versions_history[i] || path_versions_history[i] & 0x1)
+            if (get_version(to.first, to.second) != path_versions_history[i] || path_versions_history[i] & 0x1)
             {
                 ABORT();
-                unlock_all_pathlocks();
+                table_locks[to.first][to.second].unlock();
+                table_locks[from.first][from.second].unlock();
                 release_visited(path, TID);
                 return false;
             }
+            if (get_version(from.first, from.second) != path_versions_history[i - 1] || path_versions_history[i - 1] & 0x1)
+            {
+                ABORT();
+                table_locks[to.first][to.second].unlock();
+                table_locks[from.first][from.second].unlock();
+                release_visited(path, TID);
+                return false;
+            }
+            increase_version(to.first, to.second);
+            table[to.first][to.second] = table[from.first][from.second];
+            // table[from.first][from.second] = NULL;
+            increase_version(to.first, to.second);
+            table_locks[to.first][to.second].unlock();
+            table_locks[from.first][from.second].unlock();
         }
-        for (int i = path.size() - 1; i > 0; i--)
+        table_locks[path[0].first][path[0].second].lock();
+        if (get_version(path[0].first, path[0].second) != path_versions_history[0] || path_versions_history[0] & 0x1)
         {
-            increase_version(path[i].first, path[i].second);
-            table[path[i].first][path[i].second] = table[path[i - 1].first][path[i - 1].second];
-            increase_version(path[i].first, path[i].second);
+            ABORT();
+            table_locks[path[0].first][path[0].second].unlock();
+            release_visited(path, TID);
+            return false;
         }
         increase_version(path[0].first, path[0].second);
         table[path[0].first][path[0].second] = original_node;
         increase_version(path[0].first, path[0].second);
-        unlock_all_pathlocks();
+        table_locks[path[0].first][path[0].second].unlock();
         release_visited(path, TID);
         return true;
     }
