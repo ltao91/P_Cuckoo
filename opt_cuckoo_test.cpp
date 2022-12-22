@@ -5,11 +5,11 @@ int main()
     for (int t_num = 1; t_num < 200; t_num += 1)
     {
         cout << "start" << endl;
-        // OptCuckoo<int> Cuckoo(8000 * 1000);
-        OptCuckoo<int> Cuckoo(100);
+        OptCuckoo<int> Cuckoo(8000 * 1000);
+        // OptCuckoo<int> Cuckoo(100);
         vector<thread> threads;
-        // const int ops = 27000 * 1000;
-        const int ops = 380;
+        const int ops = 27000 * 1000;
+        // const int ops = 380;
         vector<pair<string, int>> args(ops);
         for (int i = 0; i < ops; i++)
         {
