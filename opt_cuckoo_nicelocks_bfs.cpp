@@ -434,7 +434,7 @@ public:
             ABORT();
             return false;
         }
-
+        cout<<path.size()<<endl;
         if (path.size() == 1)
         {
             pair<int, int> index = path.front();
