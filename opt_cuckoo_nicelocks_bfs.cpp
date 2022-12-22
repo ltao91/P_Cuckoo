@@ -246,7 +246,6 @@ public:
         for (int i = 0; i < SLOTS_NUM; i++)
         {
             Node *node = table[th1][i];
-            auto now = get_version(th1, i);
             if (node == NULL)
             {
                 pair<int, int> index = make_pair(th1, i);
@@ -265,6 +264,7 @@ public:
             }
             else if (node->tag == tag && node->data->key == key)
             {
+                exit(1);
                 table_locks[th1][i].lock();
                 if (node->data->key != key)
                 {
@@ -282,7 +282,6 @@ public:
         for (int i = 0; i < SLOTS_NUM; i++)
         {
             Node *node = table[th2][i];
-            auto now = get_version(th2, i);
             if (node == NULL)
             {
                 pair<int, int> index = make_pair(th2, i);
@@ -301,6 +300,7 @@ public:
             }
             else if (node->tag == tag && node->data->key == key)
             {
+                exit(1);
                 table_locks[th2][i].lock();
                 if (node->data->key != key)
                 {
@@ -393,30 +393,30 @@ public:
             Node *evict_node = NULL;
             for (int i = 0; i < SLOTS_NUM; i++)
             {
-                if (find(p.begin(),p.end(),make_pair(h1, i)) == p.end())
+                if (find(p.begin(), p.end(), make_pair(h1, i)) == p.end())
                 {
                     auto nv = v;
                     auto np = p;
                     nv.push_back(get_version(h1, i));
                     np.push_back(make_pair(h1, i));
-                    que.push(make_pair(np,nv));
+                    que.push(make_pair(np, nv));
                 }
-                if (find(p.begin(),p.end(),make_pair(h2, i)) == p.end())
+                if (find(p.begin(), p.end(), make_pair(h2, i)) == p.end())
                 {
                     auto nv = v;
                     auto np = p;
                     nv.push_back(get_version(h2, i));
                     np.push_back(make_pair(h2, i));
-                    que.push(make_pair(np,nv));
+                    que.push(make_pair(np, nv));
                 }
             }
         };
-        int counter=0;
+        int counter = 0;
         while (!que.empty())
         {
             auto now = que.front();
             que.pop();
-            add_next_node(now.first,now.second);
+            add_next_node(now.first, now.second);
             if (found_shortest_path)
             {
                 path = now.first;
@@ -430,7 +430,7 @@ public:
         if (!found_shortest_path)
         {
             cout << "not found shortest path" << endl;
-            
+
             ABORT();
             return false;
         }
