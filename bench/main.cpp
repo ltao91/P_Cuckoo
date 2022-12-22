@@ -2,7 +2,7 @@
 #include <map>
 int main()
 {
-    const int ops = 1600 * 1000;
+    const int ops = 16000 * 1000;
     vector<pair<string, int>> args(ops);
     for (int i = 0; i < ops; i++)
     {
@@ -12,7 +12,7 @@ int main()
     for (int t_num = 1; t_num < 200; t_num += 1)
     {
         cout << "start" << endl;
-        OptCuckoo<int> Cuckoo(800 * 1000);
+        OptCuckoo<int> Cuckoo(8000 * 1000);
         vector<thread> threads;
         auto put = [](int tid, vector<pair<string, int>> &args, OptCuckoo<int> &Cuckoo, int t_num)
         {
