@@ -246,11 +246,11 @@ public:
         for (int i = 0; i < SLOTS_NUM; i++)
         {
             Node *node = table[th1][i];
-            if (node == NULL)
+            if (node == nullptr)
             {
                 pair<int, int> index = make_pair(th1, i);
                 table_locks[index.first][index.second].lock();
-                if (table[index.first][index.second] != NULL)
+                if (table[index.first][index.second] != nullptr)
                 {
                     ABORT();
                     table_locks[index.first][index.second].unlock();
@@ -282,11 +282,11 @@ public:
         for (int i = 0; i < SLOTS_NUM; i++)
         {
             Node *node = table[th2][i];
-            if (node == NULL)
+            if (node == nullptr)
             {
                 pair<int, int> index = make_pair(th2, i);
                 table_locks[index.first][index.second].lock();
-                if (table[index.first][index.second] != NULL)
+                if (table[index.first][index.second] != nullptr)
                 {
                     ABORT();
                     table_locks[index.first][index.second].unlock();
