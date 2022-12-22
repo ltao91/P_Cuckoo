@@ -354,8 +354,8 @@ public:
             // search in h1
             for (int i = 0; i < SLOTS_NUM; i++)
             {
-                Node *node = table[h1][i];
                 auto now = get_version(h1, i);
+                Node *node = table[h1][i];
                 if (node == NULL)
                 {
                     v.push_back(now);
@@ -373,8 +373,8 @@ public:
             // search in h2
             for (int i = 0; i < SLOTS_NUM; i++)
             {
-                Node *node = table[h2][i];
                 auto now = get_version(h2, i);
+                Node *node = table[h2][i];
                 if (node == NULL)
                 {
                     v.push_back(now);
@@ -434,27 +434,30 @@ public:
             ABORT();
             return false;
         }
-        cout<<path.size()<<endl;
-        if (path.size() == 1)
-        {
-            pair<int, int> index = path.front();
-            table_locks[index.first][index.second].lock();
-            if (table[index.first][index.second] != NULL)
-            {
-                ABORT();
-                table_locks[index.first][index.second].unlock();
-                return false;
-            }
-            increase_version(index.first, index.second);
-            table[index.first][index.second] = original_node;
-            increase_version(index.first, index.second);
-            table_locks[index.first][index.second].unlock();
-            return true;
-        }
+        assert(path.size()!=1);
+        // if (path.size() == 1)
+        // {
+        //     pair<int, int> index = path.front();
+        //     table_locks[index.first][index.second].lock();
+        //     if (table[index.first][index.second] != NULL)
+        //     {
+        //         ABORT();
+        //         table_locks[index.first][index.second].unlock();
+        //         return false;
+        //     }
+        //     increase_version(index.first, index.second);
+        //     table[index.first][index.second] = original_node;
+        //     increase_version(index.first, index.second);
+        //     table_locks[index.first][index.second].unlock();
+        //     return true;
+        // }
         for (int i = path.size() - 1; i > 0; i--)
         {
             auto to = path[i];
             auto from = path[i - 1];
+
+            assert((table[to.first][to.second]!=NULL || i==path.size()-1) && table[from.first][from.second]!=NULL);
+
             // lock smaller in first.
             if (to < from)
             {
