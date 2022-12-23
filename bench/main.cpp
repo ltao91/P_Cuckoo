@@ -9,7 +9,7 @@ int main()
         args[i].first = "random:temp" + to_string(i);
         args[i].second = i;
     }
-    for (int t_num = 1; t_num < 200; t_num += 1)
+    for (int t_num = 1; t_num < 200; t_num *= 2)
     {
         cout << "start" << endl;
         OptCuckoo<int> Cuckoo(8000 * 1000);
@@ -34,7 +34,7 @@ int main()
         int abortsum=0;
         for(auto i:abort_tid)abortsum+=i;
         auto e = get_now();
-        cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
-        cout << "    aborts : " << abortsum  << endl;
+        cout <<  get_duration_ms(s, e) / 1000000 << endl;
+        // cout << "    aborts : " << abortsum  << endl;
     }
 }

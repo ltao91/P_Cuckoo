@@ -35,6 +35,7 @@ int main()
         }
         auto e = get_now();
         cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
+        cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
         // for (int i = 0; i < ops; i++)
         // {
         //     if (Cuckoo.get(args[i].first) != args[i].second)
