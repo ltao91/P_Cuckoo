@@ -35,6 +35,7 @@ int main()
         for(auto i:abort_tid)abortsum+=i;
         auto e = get_now();
         cout <<  get_duration_ms(s, e) / 1000000 << endl;
-        // cout << "    aborts : " << abortsum  << endl;
+        cout << abortsum  << endl;
     }
+    
 }

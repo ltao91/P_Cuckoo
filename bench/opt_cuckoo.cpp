@@ -325,23 +325,23 @@ public:
                 vector<pair<uint32_t, int>> tp;
                 tp.push_back(make_pair(th1, i));
                 vector<int> tv;
-                tv.push_back(get_version(th1, i));
                 que.push(make_pair(tp, tv));
             }
             {
                 vector<pair<uint32_t, int>> tp;
                 tp.push_back(make_pair(th2, i));
                 vector<int> tv;
-                tv.push_back(get_version(th2, i));
                 que.push(make_pair(tp, tv));
             }
         }
 
         auto add_next_node = [&](vector<pair<uint32_t, int>> &p, vector<int> &v)
         {
+            assert(v.size()+1==p.size());
             bool is_success = false;
             pair<int, int> before = p[p.size() - 1];
             assert(table[before.first][before.second] != NULL);
+            v.push_back(get_version(before.first,before.second));
             string key = table[before.first][before.second]->data->key;
             T val = table[before.first][before.second]->data->val;
             uint32_t h1 = 0, h2 = 0;
@@ -398,19 +398,15 @@ public:
             {
                 if (find(p.begin(), p.end(), make_pair(h1, i)) == p.end())
                 {
-                    auto nv = v;
                     auto np = p;
-                    nv.push_back(get_version(h1, i));
                     np.push_back(make_pair(h1, i));
-                    que.push(make_pair(np, nv));
+                    que.push(make_pair(np, v));
                 }
                 if (find(p.begin(), p.end(), make_pair(h2, i)) == p.end())
                 {
-                    auto nv = v;
                     auto np = p;
-                    nv.push_back(get_version(h2, i));
                     np.push_back(make_pair(h2, i));
-                    que.push(make_pair(np, nv));
+                    que.push(make_pair(np, v));
                 }
             }
         };
