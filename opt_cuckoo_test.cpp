@@ -36,46 +36,46 @@ int main()
         auto e = get_now();
         cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
         cout << "    threads : " << t_num << " time(ms) : " << get_duration_ms(s, e) / 1000000 << endl;
-        // for (int i = 0; i < ops; i++)
-        // {
-        //     if (Cuckoo.get(args[i].first) != args[i].second)
-        //     {
+        for (int i = 0; i < ops; i++)
+        {
+            if (Cuckoo.get(args[i].first) != args[i].second)
+            {
 
-        //         uint32_t h1 = 0, h2 = 0;
-        //         cout << i << endl;
-        //         cout << Cuckoo.get(args[i].first) << endl;
-        //         cout << args[i].first << endl;
-        //         cout << args[i].second << endl;
-        //         Cuckoo.debug();
-        //         hashlittle2(args[i].first.c_str(), args[i].first.length(), &h1, &h2);
-        //         cout << h1 % Cuckoo.table_size << " " << h2 % Cuckoo.table_size << endl;
-        //         cout << endl;
-        //         cout << endl;
-        //         map<OptCuckoo<int>::Node *, int> m;
-        //         int nu = 0;
-        //         for (auto &i : Cuckoo.table)
-        //         {
-        //             for (auto j : i)
-        //             {
-        //                 if (j != nullptr)
-        //                 {
-        //                     m[j]++;
-        //                     if (m[j] > 2)
-        //                     {
-        //                         cout << j->data->key << "  " << j->data->val << endl;
-        //                     }
-        //                 }
-        //                 else
-        //                 {
-        //                     nu++;
-        //                 }
-        //             }
-        //         }
-        //         cout << "null num " << nu << endl;
-        //         exit(0);
-        //     }
-        // }
-        // cout << "        works correctly" << endl;
+                uint32_t h1 = 0, h2 = 0;
+                cout << i << endl;
+                cout << Cuckoo.get(args[i].first) << endl;
+                cout << args[i].first << endl;
+                cout << args[i].second << endl;
+                Cuckoo.debug();
+                hashlittle2(args[i].first.c_str(), args[i].first.length(), &h1, &h2);
+                cout << h1 % Cuckoo.table_size << " " << h2 % Cuckoo.table_size << endl;
+                cout << endl;
+                cout << endl;
+                map<OptCuckoo<int>::Node *, int> m;
+                int nu = 0;
+                for (auto &i : Cuckoo.table)
+                {
+                    for (auto j : i)
+                    {
+                        if (j != nullptr)
+                        {
+                            m[j]++;
+                            if (m[j] > 2)
+                            {
+                                cout << j->data->key << "  " << j->data->val << endl;
+                            }
+                        }
+                        else
+                        {
+                            nu++;
+                        }
+                    }
+                }
+                cout << "null num " << nu << endl;
+                exit(0);
+            }
+        }
+        cout << "        works correctly" << endl;
     }
     // for (int t_num = 1; t_num < 60; t_num += 1)
     // {
