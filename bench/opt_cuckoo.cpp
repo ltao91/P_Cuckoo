@@ -106,24 +106,13 @@ public:
 
     int get_version(int l, int r)
     {
-        int res;
-        auto s = get_now();
-        key_versions_locks[l][r].lock();
-        res = key_versions[l][r];
-        key_versions_locks[l][r].unlock();
-        auto e = get_now();
-        get_version_t += get_duration_ms(s, e);
-        return res;
+        return __sync_add_and_fetch(&key_versions[l][r],0);
     }
+
     double increase_version_t = 0;
     void increase_version(int l, int r)
     {
-        auto s = get_now();
-        key_versions_locks[l][r].lock();
-        key_versions[l][r]++;
-        key_versions_locks[l][r].unlock();
-        auto e = get_now();
-        increase_version_t += get_duration_ms(s, e);
+        __sync_add_and_fetch(&key_versions[l][r],1);
     }
 
     T get(std::string key)
