@@ -89,45 +89,29 @@ public:
     OptCuckoo(int t_table_size)
     {
         table_size = t_table_size;
-  char command[128];
-  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
-  system(command);
         table = vector<vector<Node *>>(table_size, vector<Node *>(SLOTS_NUM));
-
-  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
-  system(command);
         visited = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
- 
-  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
-  system(command);
         key_versions = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
-
-  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
-  system(command);
         for (int i = 0; i < table_size; i++)
         {
             key_versions_locks.emplace_back(vector<mutex>(SLOTS_NUM));
             table_locks.emplace_back(vector<mutex>(SLOTS_NUM));
         }
-
-
-  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
-  system(command);
         key_versions_size = table_size;
         longest = vector<pair<pair<int, int>, T>>();
-        abort_tid=vector<int>(300);
+        abort_tid = vector<int>(300);
     }
     double get_version_t = 0;
 
     int get_version(int l, int r)
     {
-        return __sync_add_and_fetch(&key_versions[l][r],0);
+        return __sync_add_and_fetch(&key_versions[l][r], 0);
     }
 
     double increase_version_t = 0;
     void increase_version(int l, int r)
     {
-        __sync_add_and_fetch(&key_versions[l][r],1);
+        __sync_add_and_fetch(&key_versions[l][r], 1);
     }
 
     T get(std::string key)
@@ -292,7 +276,7 @@ public:
                 table_locks[index.first][index.second].lock();
                 if (table[index.first][index.second] != nullptr)
                 {
-            abort_tid[TID]++;
+                    abort_tid[TID]++;
                     ABORT();
                     table_locks[index.first][index.second].unlock();
                     continue;
@@ -338,11 +322,11 @@ public:
 
         auto add_next_node = [&](vector<pair<uint32_t, int>> &p, vector<int> &v)
         {
-            assert(v.size()+1==p.size());
+            assert(v.size() + 1 == p.size());
             bool is_success = false;
             pair<int, int> before = p[p.size() - 1];
             assert(table[before.first][before.second] != NULL);
-            v.push_back(get_version(before.first,before.second));
+            v.push_back(get_version(before.first, before.second));
             string key = table[before.first][before.second]->data->key;
             T val = table[before.first][before.second]->data->val;
             uint32_t h1 = 0, h2 = 0;
@@ -434,7 +418,7 @@ public:
             ABORT();
             return false;
         }
-        assert(path.size()!=1);
+        assert(path.size() != 1);
         // if (path.size() == 1)
         // {
         //     pair<int, int> index = path.front();
@@ -456,7 +440,7 @@ public:
             auto to = path[i];
             auto from = path[i - 1];
 
-            assert((table[to.first][to.second]!=NULL || i==path.size()-1) && table[from.first][from.second]!=NULL);
+            assert((table[to.first][to.second] != NULL || i == path.size() - 1) && table[from.first][from.second] != NULL);
 
             // lock smaller in first.
             if (to < from)
@@ -473,7 +457,7 @@ public:
             if (get_version(to.first, to.second) != path_versions_history[i] || path_versions_history[i] & 0x1)
             {
                 ABORT();
-            abort_tid[TID]++;
+                abort_tid[TID]++;
                 table_locks[to.first][to.second].unlock();
                 table_locks[from.first][from.second].unlock();
                 return false;
@@ -481,7 +465,7 @@ public:
             if (get_version(from.first, from.second) != path_versions_history[i - 1] || path_versions_history[i - 1] & 0x1)
             {
                 ABORT();
-            abort_tid[TID]++;
+                abort_tid[TID]++;
                 table_locks[to.first][to.second].unlock();
                 table_locks[from.first][from.second].unlock();
                 return false;
