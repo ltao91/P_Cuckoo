@@ -45,20 +45,11 @@ public:
             tag = t_tag;
             data = new Data(t_key, t_val);
         }
-        // ~Node(){
-        //     delete data;
-        // }
+        ~Node(){
+            if(data!=NULL)
+            delete data;
+        }
     };
-    // ~OptCuckoo(){
-    //     for(auto &i:table){
-    //         for(auto &j:i){
-    //             if(j!=nullptr){
-    //                 delete j;
-    //                 j=nullptr;
-    //             }
-    //         }
-    //     }
-    // }
 
     const int SLOTS_NUM = 4;
     const int MAX_LOOP_FOR_PUT = 80 * 1000;
@@ -101,6 +92,15 @@ public:
         longest = vector<pair<pair<int, int>, T>>();
         abort_tid = vector<int>(300);
     }
+
+    ~OptCuckoo(){
+        for(int i=0;i<table_size;i++){
+            for(int j=0;j<SLOTS_NUM;j++){
+                if(table[i][j]!=NULL)delete table[i][j];
+            }
+        }
+    }
+
     double get_version_t = 0;
 
     int get_version(int l, int r)
