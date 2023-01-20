@@ -89,15 +89,30 @@ public:
     OptCuckoo(int t_table_size)
     {
         table_size = t_table_size;
+  char command[128];
+  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
+  system(command);
         table = vector<vector<Node *>>(table_size, vector<Node *>(SLOTS_NUM));
+
+  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
+  system(command);
         visited = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
+ 
+  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
+  system(command);
         key_versions = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
+
+  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
+  system(command);
         for (int i = 0; i < table_size; i++)
         {
             key_versions_locks.emplace_back(vector<mutex>(SLOTS_NUM));
             table_locks.emplace_back(vector<mutex>(SLOTS_NUM));
         }
 
+
+  sprintf(command, "grep VmRSS /proc/%d/status", getpid());
+  system(command);
         key_versions_size = table_size;
         longest = vector<pair<pair<int, int>, T>>();
         abort_tid=vector<int>(300);
@@ -186,7 +201,6 @@ public:
 
     void put(std::string key, T val, int TID)
     {
-        auto s = get_now();
         int i = 0;
         while (!put_impl(key, val, TID))
         {
@@ -201,8 +215,6 @@ public:
                 return;
             }
         }
-        auto e = get_now();
-        sum_time += get_duration_ms(s, e);
     }
     double write_lock_time = 0;
     double hash_time = 0;
