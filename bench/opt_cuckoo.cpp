@@ -11,7 +11,6 @@
 #include <algorithm>
 using namespace std;
 
-vector<int> abort_tid;
 
 // T val   string key
 template <class T>
@@ -60,7 +59,6 @@ public:
 
     vector<vector<Node *>> table;
     vector<vector<mutex>> table_locks;
-    vector<vector<int>> visited;
     vector<vector<int>> key_versions;
     vector<vector<mutex>> key_versions_locks;
 
@@ -81,7 +79,6 @@ public:
     {
         table_size = t_table_size;
         table = vector<vector<Node *>>(table_size, vector<Node *>(SLOTS_NUM));
-        visited = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
         key_versions = vector<vector<int>>(table_size, vector<int>(SLOTS_NUM));
         for (int i = 0; i < table_size; i++)
         {
@@ -89,8 +86,6 @@ public:
             table_locks.emplace_back(vector<mutex>(SLOTS_NUM));
         }
         key_versions_size = table_size;
-        longest = vector<pair<pair<int, int>, T>>();
-        abort_tid = vector<int>(300);
     }
 
     ~OptCuckoo(){
@@ -189,13 +184,10 @@ public:
         while (!put_impl(key, val, TID))
         {
             ABORT();
-            abort_tid[TID]++;
             i++;
-            aborted_num++;
             if (i >= 100000)
             {
                 cout << "Too many abort" << endl;
-                exit(0);
                 return;
             }
         }
@@ -241,7 +233,6 @@ public:
                 if (table[index.first][index.second] != nullptr)
                 {
                     ABORT();
-                    abort_tid[TID]++;
                     table_locks[index.first][index.second].unlock();
                     continue;
                 }
@@ -276,7 +267,6 @@ public:
                 table_locks[index.first][index.second].lock();
                 if (table[index.first][index.second] != nullptr)
                 {
-                    abort_tid[TID]++;
                     ABORT();
                     table_locks[index.first][index.second].unlock();
                     continue;
@@ -457,7 +447,6 @@ public:
             if (get_version(to.first, to.second) != path_versions_history[i] || path_versions_history[i] & 0x1)
             {
                 ABORT();
-                abort_tid[TID]++;
                 table_locks[to.first][to.second].unlock();
                 table_locks[from.first][from.second].unlock();
                 return false;
@@ -465,7 +454,6 @@ public:
             if (get_version(from.first, from.second) != path_versions_history[i - 1] || path_versions_history[i - 1] & 0x1)
             {
                 ABORT();
-                abort_tid[TID]++;
                 table_locks[to.first][to.second].unlock();
                 table_locks[from.first][from.second].unlock();
                 return false;
@@ -481,7 +469,6 @@ public:
         if (get_version(path[0].first, path[0].second) != path_versions_history[0] || path_versions_history[0] & 0x1)
         {
             ABORT();
-            abort_tid[TID]++;
             table_locks[path[0].first][path[0].second].unlock();
             return false;
         }

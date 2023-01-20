@@ -16,7 +16,7 @@ int main()
     args[i].first = "random:temp" + to_string(i);
     args[i].second = i;
   }
-  for (int t_num = 1; t_num < 200; t_num *= 2)
+  for (int t_num = 4; t_num < 200; t_num *= 2)
   {
     double ms_sum = 0;
     double ms_best = 1000000000;
