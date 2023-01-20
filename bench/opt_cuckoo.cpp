@@ -494,4 +494,9 @@ public:
             cout << endl;
         }
     }
+    void tput(int n, T val, int TID)
+    {
+        string s="random:"+to_string(n);
+        put(s,val,TID);
+    }
 };

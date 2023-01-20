@@ -29,7 +29,7 @@ int main()
       {
         for (int i = tid; i < ops; i += t_num)
         {
-          Cuckoo.put(args[i].first, args[i].second, i + 1);
+          Cuckoo.tput(i, args[i].second, i + 1);
         }
       };
 
